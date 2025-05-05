@@ -1,0 +1,56 @@
+
+****************************** --- ft_POPEN --- ***********************************
+
+
+Assignment name		: ft_popen
+Expected files		: ft_popen.c
+Allowed functions:	: pipe, fork, dup2, execvp, close, exit
+
+Write the following function:
+
+int	ft_popen(const char *file, char *const argv[], char type);
+
+The function must launch the executable file with the arguments argv (using execvp).
+If type is 'r' the function must return a file descriptor connected to the output of the command.
+If type is 'w' the function must return a file descriptor connected to the input of the command.
+In case of error or invalid parameter the function must return -1.
+
+For example, the function could be used like that:
+
+int	main() {
+	int	fd = ft_popen("ls", (char *const []){"ls", NULL}, 'r');
+	char	*line;
+	while ((line = get_next_line(fd)))
+		ft_putstr(line);
+}
+
+Hints:
+Do not leak file descriptors!
+
+
+_____________________________________________________________
+
+
+Nom : ft_popen
+Fonctions autorisées : pipe, fork, dup2, execvp, close, exit
+--------------------------------------------------------------------------------
+Écrivez la fonction suivante :
+
+int ft_popen(const char *file, const char *argv[], char type);
+
+La fonction doit lancer le fichier exécutable avec les arguments argv (en utilisant execvp).
+Si le type est « r », la fonction doit renvoyer un descripteur de fichier connecté à la sortie de la commande.
+Si le type est « w », la fonction doit renvoyer un descripteur de fichier connecté à l’entrée de la commande.
+En cas d’erreur ou de paramètre invalide, la fonction doit renvoyer -1.
+
+Par exemple, la fonction pourrait être utilisée ainsi :
+
+int main()
+{
+int fd = ft_popen("ls", (const char *[]) {"ls", NULL}, 'r');
+char *line; while ((line = get_next_line(fd)))
+ft_putstr(line);
+}
+
+Conseils :
+Ne pas divulguer les descripteurs de fichiers.
