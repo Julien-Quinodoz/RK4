@@ -1,3 +1,3 @@
 
 
-divers = divers cersions de git que j'ai trouvée, avec sujet ... ou pas :)
+divers = divers versions de git que j'ai trouvé, avec sujet ... ou pas :)
