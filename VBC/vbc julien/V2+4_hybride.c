@@ -3,12 +3,9 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-typedef struct node {
-    enum {
-        ADD,
-        MULTI,
-        VAL
-    } type;
+typedef struct node
+{
+    enum {ADD, MULTI, VAL} type;
     int val;
     struct node *l;
     struct node *r;
