@@ -1,58 +1,36 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <ctype.h>
-#include <stdlib.h>
 
-typedef struct node
-{
-    enum {ADD, MULTI, VAL} type;
+//This file is given at the exam
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+typedef struct node {
+    enum {
+        ADD,
+        MULTI,
+        VAL
+    }   type;
     int val;
     struct node *l;
     struct node *r;
-} node;
+}   node;
 
-// --- FONCTIONS UTILITAIRES ---
+node *parse_expr(char **s);
 
-void unexpected(char c)
+node    *new_node(node n)
 {
-    if (c)
-        printf("Unexpected token '%c'\n", c);
-    else
-        printf("Unexpected end of input\n");
-    exit(1);
-}
-
-int accept(char **s, char c)
-{
-    if (**s == c)
-    {
-        (*s)++;
-        return 1;
-    }
-    return 0;
-}
-
-int expect(char **s, char c)
-{
-    if (accept(s, c))
-        return 1;
-    unexpected(**s);
-    return 0;
-}
-
-node *new_node(node n)
-{
-    node *ret = calloc(1, sizeof(node));
+    node *ret = calloc(1, sizeof(n));
     if (!ret)
-        return NULL;
+        return (NULL);
     *ret = n;
-    return ret;
+    return (ret);
 }
 
-void destroy_tree(node *n)
+void    destroy_tree(node *n)
 {
     if (!n)
-        return;
+        return ;
     if (n->type != VAL)
     {
         destroy_tree(n->l);
@@ -61,24 +39,48 @@ void destroy_tree(node *n)
     free(n);
 }
 
+void    unexpected(char c)
+{
+    if (c)
+        printf("Unexpected token '%c'\n", c);
+    else
+        printf("Unexpected end of file\n");
+}
+
+int accept(char **s, char c)
+{
+    if (**s == c)
+    {
+        (*s)++;
+        return (1);
+    }
+    return (0);
+}
+
+int expect(char **s, char c)
+{
+    if (accept(s, c))
+        return (1);
+    unexpected(**s);
+    return (0);
+}
+
+
+
 int eval_tree(node *tree)
 {
     switch (tree->type)
     {
         case ADD:
-            return eval_tree(tree->l) + eval_tree(tree->r);
+            return (eval_tree(tree->l) + eval_tree(tree->r));
         case MULTI:
-            return eval_tree(tree->l) * eval_tree(tree->r);
+            return (eval_tree(tree->l) * eval_tree(tree->r));
         case VAL:
-            return tree->val;
+            return (tree->val);
     }
-    return 0;
 }
 
-// --- PARSING ---
-
-node *parse_expr(char **s);
-
+// Fonction parse_factor : gère les chiffres et les parenthèses
 node *parse_factor(char **s)
 {
     if (isdigit(**s))
@@ -101,6 +103,7 @@ node *parse_factor(char **s)
     return NULL;
 }
 
+// Fonction parse_term : gère les multiplications
 node *parse_term(char **s)
 {
     node *left = parse_factor(s);
@@ -126,6 +129,7 @@ node *parse_term(char **s)
     return left;
 }
 
+// Fonction parse_expr : gère les additions
 node *parse_expr(char **s)
 {
     node *left = parse_term(s);
@@ -151,54 +155,22 @@ node *parse_expr(char **s)
     return left;
 }
 
-// --- MAIN ---
 
 int main(int argc, char **argv)
 {
     if (argc != 2)
-        return 1;
-
-    char *s = argv[1];
+        return (1);
+	char *s = argv[1];
     node *tree = parse_expr(&s);
+    if (!tree)
+        return (1);
 
-    if (!tree || *s) {
-        if (*s)
-            unexpected(*s);
-        else
-            unexpected(0);
-        return 1;
-    }
-
+	if (*s)
+	{
+		unexpected(*s);
+		destroy_tree(tree);
+		return 1;
+	}
     printf("%d\n", eval_tree(tree));
     destroy_tree(tree);
-    return 0;
 }
-
-/*
----->  les trois étapes à bien maîtriser :
-
-1 expr gère les +
-
-2 term gère les *
-
-3 factor gère les chiffres et les parenthèses
-
------------------------------------------------
-exemple : 2 + 3 * 4 :
-
-        [+]        ← type: ADD
-       /   \
-     [2]   [*]      ← type: VAL (gauche), type: MULTI (droite)
-           / \
-         [3] [4]    ← type: VAL, type: VAL
-
-----------------------------------
-
-
-
-
-
-
-
-
-*/
