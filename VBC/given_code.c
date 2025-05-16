@@ -1,7 +1,5 @@
-//Ce code est déjà fourni. Il vous suffit de coder les fonctions suivantes, présentes dans vbc.c
-//      parse_factor -  parse_term -  parse_expr
-//Et de modifier les fonctions suivantes : unexpected - accept - eval_tree - main
-//Lisez vbc.c et vous comprendrez
+
+//This file is given 
 
 #include <stdio.h>
 #include <malloc.h>
@@ -17,8 +15,6 @@ typedef struct node {
     struct node *l;
     struct node *r;
 }   node;
-
-node *n(**s);
 
 node    *new_node(node n)
 {

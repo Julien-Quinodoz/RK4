@@ -1,14 +1,8 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   T4.c                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jquinodo <jquinodo@student.42lausanne.c    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 13:13:26 by jquinodo          #+#    #+#             */
-/*   Updated: 2025/05/14 13:57:34 by jquinodo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #include <stdio.h>
@@ -25,7 +19,6 @@ typedef struct node {
     struct node *l;
     struct node *r;
 }   node;
-
 
 node    *parse_expr(char **s);
 
@@ -80,36 +73,34 @@ node    *parse_factor(char **s)
 {
 	if(isdigit(**s))
 	{
-		node n = {VAL, **s - '0',  NULL, NULL};
+		node n = {VAL , **s - '0', NULL, NULL};
 		(*s)++;
-		return (new_node(n));
+		return new_node(n);
 	}
 
-	if (accept(s , '('))
+	if(accept(s, '('))
 	{
 		node *n = parse_expr(s);
-
 		if(!expect(s, ')'))
 		{
 			destroy_tree(n);
 			return NULL;
 		}
+
 		return n;
 	}
 
 	unexpected(**s);
 	return NULL;
+
 }
-
-
 
 node    *parse_term(char **s)
 {
 	node *left = parse_factor(s);
-	if (!left)
+	if(!left)
 		return NULL;
-
-	while (accept(s, '*'))
+	while(accept(s, '*'))
 	{
 		node *right = parse_factor(s);
 		if(!right)
@@ -118,8 +109,9 @@ node    *parse_term(char **s)
 			return NULL;
 		}
 
-		node n = {MULTI, 0, left, right, };
+		node n = {MULTI, 0 , left, right};
 		left = new_node(n);
+
 		if(!left)
 		{
 			destroy_tree(right);
@@ -129,14 +121,12 @@ node    *parse_term(char **s)
 	return left;
 }
 
-
 node    *parse_expr(char **s)
 {
 	node *left = parse_term(s);
-	if (!left)
+	if(!left)
 		return NULL;
-
-	while (accept(s, '+'))
+	while(accept(s, '+'))
 	{
 		node *right = parse_term(s);
 		if(!right)
@@ -145,8 +135,9 @@ node    *parse_expr(char **s)
 			return NULL;
 		}
 
-		node n = {ADD, 0, left, right, };
+		node n = {ADD, 0 , left, right};
 		left = new_node(n);
+
 		if(!left)
 		{
 			destroy_tree(right);
@@ -181,7 +172,7 @@ int main(int argc, char **argv)
 	{
 		unexpected(*s);
 		destroy_tree(tree);
-		return 1;
+		return -1;
 	}
     printf("%d\n", eval_tree(tree));
     destroy_tree(tree);

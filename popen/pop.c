@@ -1,17 +1,10 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pop-15.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jquinodo <jquinodo@student.42lausanne.c    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 15:31:33 by jquinodo          #+#    #+#             */
-/*   Updated: 2025/05/14 15:48:48 by jquinodo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <stdlib.h>
-# include <unistd.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 
 int	ft_popen(const char *file, char *const argv[], char type)
@@ -25,31 +18,36 @@ int	ft_popen(const char *file, char *const argv[], char type)
 	{
 		if(pid == 0)
 		{
-			dup2(fd[1] , 1);
+			dup2(fd[1], 1);
 			close(fd[1]);
 			close(fd[0]);
-			execvp(file , (char *const*)argv);
+			execvp(file, (char *const*)argv);
 			exit (-1);
 		}
 		close(fd[1]);
 		return (fd[0]);
+
 	}
+
 	if(type == 'w')
 	{
 		if(pid == 0)
 		{
-			dup2(fd[0] , 0);
+			dup2(fd[0], 0);
 			close(fd[1]);
 			close(fd[0]);
-			execvp(file , (char *const*)argv);
+			execvp(file, (char *const*)argv);
 			exit (-1);
 		}
 		close(fd[0]);
 		return (fd[1]);
+
 	}
+
+
+
 	return -1;
 }
-
 
 //======== TESTE DE POPEN =======================================
 
